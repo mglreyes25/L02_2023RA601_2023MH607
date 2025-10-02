@@ -1,11 +1,5 @@
 import { pool } from '../db.js';
 
-
-//
-// ================== USUARIOS ==================
-//
-
-// Obtener todos los usuarios
 export const getAllUsuarios = async () => {
   const result = await pool.query("SELECT * FROM usuarios");
   return result.rows;
@@ -19,8 +13,6 @@ export const getUsuarioById = async (id) => {
   return result.rows[0] || null;
 };
 
-
-// Crear usuario
 export const createUsuario = async (
   rolld,
   nombreUsuario,
@@ -36,7 +28,6 @@ export const createUsuario = async (
   return result.rows[0];
 };
 
-// Actualizar usuario
 export const updateUsuario = async (
   id,
   rolld,
@@ -54,12 +45,10 @@ export const updateUsuario = async (
   return result.rows[0] || null;
 };
 
-// Eliminar usuario
 export const deleteUsuario = async (id) => {
   await pool.query("DELETE FROM usuarios WHERE usuariold=$1", [id]);
 };
 
-// Buscar por nombre
 export const getUsuariosByNombre = async (nombre) => {
   const result = await pool.query(
     "SELECT * FROM usuarios WHERE LOWER(nombre) LIKE LOWER($1)",
@@ -68,7 +57,6 @@ export const getUsuariosByNombre = async (nombre) => {
   return result.rows;
 };
 
-// Buscar por apellido
 export const getUsuariosByApellido = async (apellido) => {
   const result = await pool.query(
     "SELECT * FROM usuarios WHERE LOWER(apellido) LIKE LOWER($1)",
@@ -77,7 +65,6 @@ export const getUsuariosByApellido = async (apellido) => {
   return result.rows;
 };
 
-// Buscar por rol
 export const getUsuariosByRol = async (rol) => {
   const result = await pool.query(
     `SELECT u.* FROM usuarios u
@@ -88,15 +75,12 @@ export const getUsuariosByRol = async (rol) => {
   return result.rows;
 };
 
-// ================== PUBLICACIONES ==================
 
-// Obtener todas las publicaciones
 export const getAllPublicaciones = async () => {
   const result = await pool.query("SELECT * FROM publications ORDER BY publicacionld");
   return result.rows;
 };
 
-// Obtener publicación por ID
 export const getPublicacionById = async (id) => {
   const result = await pool.query(
     "SELECT * FROM publications WHERE publicacionld = $1",
@@ -105,7 +89,6 @@ export const getPublicacionById = async (id) => {
   return result.rows[0] || null;
 };
 
-// Crear publicación
 export const createPublicacion = async (titulo, description, usuariold) => {
   const result = await pool.query(
     `INSERT INTO publications (titulo, description, usuariold)
@@ -116,7 +99,6 @@ export const createPublicacion = async (titulo, description, usuariold) => {
   return result.rows[0];
 };
 
-// Actualizar publicación
 export const updatePublicacion = async (id, titulo, description, usuariold) => {
   const result = await pool.query(
     `UPDATE publications
@@ -128,7 +110,6 @@ export const updatePublicacion = async (id, titulo, description, usuariold) => {
   return result.rows[0] || null;
 };
 
-// Eliminar publicación
 export const deletePublicacion = async (id) => {
   const result = await pool.query(
     "DELETE FROM publications WHERE publicacionld = $1 RETURNING *",
@@ -137,7 +118,6 @@ export const deletePublicacion = async (id) => {
   return result.rows[0] || null;
 };
 
-// Publicaciones por usuario
 export const getPublicacionesByUsuario = async (usuariold) => {
   const result = await pool.query(
     "SELECT * FROM publications WHERE usuariold = $1 ORDER BY publicacionld",
@@ -146,7 +126,6 @@ export const getPublicacionesByUsuario = async (usuariold) => {
   return result.rows;
 };
 
-// Top N publicaciones con más comentarios
 export const getTopPublicaciones = async (n) => {
   const result = await pool.query(
     `SELECT p.publicacionld, p.titulo, COUNT(c.cometariold) AS total_comentarios
@@ -161,17 +140,11 @@ export const getTopPublicaciones = async (n) => {
 };
 
 
-//
-// ================== COMENTARIOS ==================
-//
-
-// Obtener todos los comentarios
 export const getAllComentarios = async () => {
   const result = await pool.query("SELECT * FROM comentarios");
   return result.rows;
 };
 
-// Obtener comentario por ID
 export const getComentarioById = async (id) => {
   const result = await pool.query(
     "SELECT * FROM comentarios WHERE cometariold=$1",
@@ -180,7 +153,6 @@ export const getComentarioById = async (id) => {
   return result.rows[0];
 };
 
-// Crear comentario
 export const createComentario = async (publicacionld, comentario, usuariold) => {
   const result = await pool.query(
     `INSERT INTO comentarios (publicacionld, comentario, usuariold)
@@ -190,7 +162,6 @@ export const createComentario = async (publicacionld, comentario, usuariold) => 
   return result.rows[0];
 };
 
-// Actualizar comentario
 export const updateComentario = async (id, publicacionld, comentario, usuariold) => {
   const result = await pool.query(
     `UPDATE comentarios 
@@ -201,12 +172,10 @@ export const updateComentario = async (id, publicacionld, comentario, usuariold)
   return result.rows[0];
 };
 
-// Eliminar comentario
 export const deleteComentario = async (id) => {
   await pool.query("DELETE FROM comentarios WHERE cometariold=$1", [id]);
 };
 
-// Comentarios por publicación
 export const getComentariosByPublicacion = async (publicacionld) => {
   const result = await pool.query(
     "SELECT * FROM comentarios WHERE publicacionld=$1",
@@ -215,7 +184,6 @@ export const getComentariosByPublicacion = async (publicacionld) => {
   return result.rows;
 };
 
-// Comentarios por usuario
 export const getComentariosByUsuario = async (usuariold) => {
   const result = await pool.query(
     "SELECT * FROM comentarios WHERE usuariold=$1",
@@ -224,7 +192,6 @@ export const getComentariosByUsuario = async (usuariold) => {
   return result.rows;
 };
 
-//roles
 
 export const getAllRoles = async () => {
   const result = await pool.query("SELECT * FROM roles");
@@ -256,17 +223,11 @@ export const deleteRol = async (id) => {
   await pool.query("DELETE FROM roles WHERE rolld=$1", [id]);
 };
 
-//
-// ================== CALIFICACIONES ==================
-//
-
-// Obtener todas las calificaciones
 export const getAllCalificaciones = async () => {
   const result = await pool.query("SELECT * FROM calificaciones");
   return result.rows;
 };
 
-// Obtener calificación por ID
 export const getCalificacionById = async (id) => {
   const result = await pool.query(
     "SELECT * FROM calificaciones WHERE calificacionld=$1",
@@ -275,7 +236,6 @@ export const getCalificacionById = async (id) => {
   return result.rows[0];
 };
 
-// Crear calificación
 export const createCalificacion = async (publicacionld, usuariold, calificacion) => {
   const result = await pool.query(
     `INSERT INTO calificaciones (publicacionld, usuariold, calificacion)
@@ -285,7 +245,6 @@ export const createCalificacion = async (publicacionld, usuariold, calificacion)
   return result.rows[0];
 };
 
-// Actualizar calificación
 export const updateCalificacion = async (id, publicacionld, usuariold, calificacion) => {
   const result = await pool.query(
     `UPDATE calificaciones
@@ -296,12 +255,10 @@ export const updateCalificacion = async (id, publicacionld, usuariold, calificac
   return result.rows[0];
 };
 
-// Eliminar calificación
 export const deleteCalificacion = async (id) => {
   await pool.query("DELETE FROM calificaciones WHERE calificacionld=$1", [id]);
 };
 
-// Calificaciones por publicación
 export const getCalificacionesByPublicacion = async (publicacionld) => {
   const result = await pool.query(
     "SELECT * FROM calificaciones WHERE publicacionld=$1",
@@ -310,7 +267,6 @@ export const getCalificacionesByPublicacion = async (publicacionld) => {
   return result.rows;
 };
 
-// Calificaciones por usuario
 export const getCalificacionesByUsuario = async (usuariold) => {
   const result = await pool.query(
     "SELECT * FROM calificaciones WHERE usuariold=$1",
@@ -319,7 +275,6 @@ export const getCalificacionesByUsuario = async (usuariold) => {
   return result.rows;
 };
 
-// Promedio de calificación por publicación
 export const getPromedioCalificacionPorPublicacion = async (publicacionld) => {
   const result = await pool.query(
     `SELECT AVG(calificacion)::numeric(10,2) AS promedio

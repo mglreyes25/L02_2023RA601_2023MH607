@@ -1,10 +1,5 @@
 import * as service from "../services/usersServices.js";
 
-/* ==========================
-   📍 USUARIOS
-========================== */
-
-// Obtener todos los usuarios
 export const getAllUsuarios = async (req, res) => {
   try {
     const usuarios = await service.getAllUsuarios();
@@ -14,7 +9,6 @@ export const getAllUsuarios = async (req, res) => {
   }
 };
 
-// Obtener usuario por ID
 export const getUsuarioById = async (req, res) => {
   try {
     const usuario = await service.getUsuarioById(req.params.id);
@@ -25,8 +19,6 @@ export const getUsuarioById = async (req, res) => {
   }
 };
 
-
-// Crear usuario
 export const createUsuario = async (req, res) => {
   try {
     const { rolld, nombreUsuario, clave, nombre, apellido } = req.body;
@@ -37,7 +29,6 @@ export const createUsuario = async (req, res) => {
   }
 };
 
-// Actualizar usuario
 export const updateUsuario = async (req, res) => {
   try {
     const { rolld, nombreUsuario, clave, nombre, apellido } = req.body;
@@ -56,7 +47,6 @@ export const updateUsuario = async (req, res) => {
   }
 };
 
-// Eliminar usuario
 export const deleteUsuario = async (req, res) => {
   try {
     await service.deleteUsuario(req.params.id);
@@ -66,7 +56,6 @@ export const deleteUsuario = async (req, res) => {
   }
 };
 
-// Filtrar usuarios
 export const getUsuariosByNombre = async (req, res) => {
   try {
     const usuarios = await service.getUsuariosByNombre(req.params.nombre);
@@ -94,11 +83,6 @@ export const getUsuariosByRol = async (req, res) => {
   }
 };
 
-/* ==========================
-   📍 PUBLICACIONES
-========================== */
-
-// Obtener todas las publicaciones
 export const getAllPublicaciones = async (req, res) => {
   try {
     const publicaciones = await service.getAllPublicaciones();
@@ -108,7 +92,6 @@ export const getAllPublicaciones = async (req, res) => {
   }
 };
 
-// Obtener publicación por ID
 export const getPublicacionById = async (req, res) => {
   try {
     const publicacion = await service.getPublicacionById(req.params.id);
@@ -119,7 +102,6 @@ export const getPublicacionById = async (req, res) => {
   }
 };
 
-// Crear publicación
 export const createPublicacion = async (req, res) => {
   try {
     const { titulo, description, usuariold } = req.body;
@@ -130,7 +112,6 @@ export const createPublicacion = async (req, res) => {
   }
 };
 
-// Actualizar publicación
 export const updatePublicacion = async (req, res) => {
   try {
     const { titulo, description, usuariold } = req.body;
@@ -147,7 +128,6 @@ export const updatePublicacion = async (req, res) => {
   }
 };
 
-// Eliminar publicación
 export const deletePublicacion = async (req, res) => {
   try {
     await service.deletePublicacion(req.params.id);
@@ -157,7 +137,6 @@ export const deletePublicacion = async (req, res) => {
   }
 };
 
-// Publicaciones por usuario
 export const getPublicacionesByUsuario = async (req, res) => {
   try {
     const publicaciones = await service.getPublicacionesByUsuario(req.params.usuariold);
@@ -167,7 +146,6 @@ export const getPublicacionesByUsuario = async (req, res) => {
   }
 };
 
-// Top N publicaciones más comentadas
 export const getTopPublicaciones = async (req, res) => {
   try {
     const top = await service.getTopPublicaciones(req.params.n);
@@ -177,11 +155,7 @@ export const getTopPublicaciones = async (req, res) => {
   }
 };
 
-/* ==========================
-   📍 COMENTARIOS
-========================== */
 
-// Obtener todos los comentarios
 export const getAllComentarios = async (req, res) => {
   try {
     const comentarios = await service.getAllComentarios();
@@ -191,7 +165,6 @@ export const getAllComentarios = async (req, res) => {
   }
 };
 
-// Obtener comentario por ID
 export const getComentarioById = async (req, res) => {
   try {
     const comentario = await service.getComentarioById(req.params.id);
@@ -202,7 +175,6 @@ export const getComentarioById = async (req, res) => {
   }
 };
 
-// Crear comentario
 export const createComentario = async (req, res) => {
   try {
     const { publicacionld, comentario, usuariold } = req.body;
@@ -213,7 +185,6 @@ export const createComentario = async (req, res) => {
   }
 };
 
-// Actualizar comentario
 export const updateComentario = async (req, res) => {
   try {
     const { publicacionld, comentario, usuariold } = req.body;
@@ -230,7 +201,6 @@ export const updateComentario = async (req, res) => {
   }
 };
 
-// Eliminar comentario
 export const deleteComentario = async (req, res) => {
   try {
     await service.deleteComentario(req.params.id);
@@ -240,7 +210,6 @@ export const deleteComentario = async (req, res) => {
   }
 };
 
-// Comentarios por publicación
 export const getComentariosByPublicacion = async (req, res) => {
   try {
     const comentarios = await service.getComentariosByPublicacion(req.params.publicacionld);
@@ -250,7 +219,6 @@ export const getComentariosByPublicacion = async (req, res) => {
   }
 };
 
-// Comentarios por usuario
 export const getComentariosByUsuario = async (req, res) => {
   try {
     const comentarios = await service.getComentariosByUsuario(req.params.usuariold);
@@ -311,11 +279,6 @@ export const deleteRol = async (req, res, next) => {
   }
 };
 
-/* ==========================
-   📍 CALIFICACIONES
-========================== */
-
-// Obtener todas las calificaciones
 export const getAllCalificaciones = async (req, res) => {
   try {
     const calificaciones = await service.getAllCalificaciones();
@@ -325,7 +288,6 @@ export const getAllCalificaciones = async (req, res) => {
   }
 };
 
-// Obtener calificación por ID
 export const getCalificacionById = async (req, res) => {
   try {
     const calificacion = await service.getCalificacionById(req.params.id);
@@ -336,7 +298,6 @@ export const getCalificacionById = async (req, res) => {
   }
 };
 
-// Crear calificación
 export const createCalificacion = async (req, res) => {
   try {
     const { publicacionld, usuariold, calificacion } = req.body;
@@ -347,7 +308,6 @@ export const createCalificacion = async (req, res) => {
   }
 };
 
-// Actualizar calificación
 export const updateCalificacion = async (req, res) => {
   try {
     const { publicacionld, usuariold, calificacion } = req.body;
@@ -364,7 +324,6 @@ export const updateCalificacion = async (req, res) => {
   }
 };
 
-// Eliminar calificación
 export const deleteCalificacion = async (req, res) => {
   try {
     await service.deleteCalificacion(req.params.id);
@@ -374,7 +333,6 @@ export const deleteCalificacion = async (req, res) => {
   }
 };
 
-// Calificaciones por publicación
 export const getCalificacionesByPublicacion = async (req, res) => {
   try {
     const calificaciones = await service.getCalificacionesByPublicacion(req.params.publicacionld);
@@ -384,7 +342,6 @@ export const getCalificacionesByPublicacion = async (req, res) => {
   }
 };
 
-// Calificaciones por usuario
 export const getCalificacionesByUsuario = async (req, res) => {
   try {
     const calificaciones = await service.getCalificacionesByUsuario(req.params.usuariold);
@@ -394,7 +351,6 @@ export const getCalificacionesByUsuario = async (req, res) => {
   }
 };
 
-// Promedio de calificaciones por publicación
 export const getPromedioCalificacionPorPublicacion = async (req, res) => {
   try {
     const promedio = await service.getPromedioCalificacionPorPublicacion(req.params.publicacionld);
