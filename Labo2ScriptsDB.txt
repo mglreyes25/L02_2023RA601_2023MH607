@@ -1,0 +1,123 @@
+-- Habilitar la extensión pgcrypto para gen_random_uuid()
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+
+-- Crear tabla roles
+CREATE TABLE roles (
+    rolld UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    rol VARCHAR(50) NOT NULL
+);
+
+-- Crear tabla usuarios
+CREATE TABLE usuarios (
+    usuariold UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    rolld UUID NOT NULL,
+    nombreUsuario VARCHAR(100) NOT NULL UNIQUE,
+    clave VARCHAR(255) NOT NULL,
+    nombre VARCHAR(100) NOT NULL,
+    apellido VARCHAR(100) NOT NULL,
+    FOREIGN KEY (rolld) REFERENCES roles(rolld) ON DELETE CASCADE
+);
+
+-- Crear tabla publications
+CREATE TABLE publications (
+    publicacionld UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    titulo VARCHAR(255) NOT NULL,
+    description TEXT,
+    usuariold UUID NOT NULL,
+    FOREIGN KEY (usuariold) REFERENCES usuarios(usuariold) ON DELETE CASCADE
+);
+
+-- Crear tabla comentarios
+CREATE TABLE comentarios (
+    cometariold UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    publicacionld UUID NOT NULL,
+    comentario TEXT NOT NULL,
+    usuariold UUID NOT NULL,
+    FOREIGN KEY (publicacionld) REFERENCES publications(publicacionld) ON DELETE CASCADE,
+    FOREIGN KEY (usuariold) REFERENCES usuarios(usuariold) ON DELETE CASCADE
+);
+
+-- Crear tabla calificaciones
+CREATE TABLE calificaciones (
+    calificacionld UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    publicacionld UUID NOT NULL,
+    usuariold UUID NOT NULL,
+    calificacion INTEGER NOT NULL CHECK (calificacion >= 1 AND calificacion <= 5),
+    FOREIGN KEY (publicacionld) REFERENCES publications(publicacionld) ON DELETE CASCADE,
+    FOREIGN KEY (usuariold) REFERENCES usuarios(usuariold) ON DELETE CASCADE,
+    UNIQUE (publicacionld, usuariold) -- Un usuario solo puede calificar una publicación una vez
+);
+-----------------------------------------------------
+-- Insertar roles
+INSERT INTO roles (rol) VALUES
+('Administrador'),
+('Editor'),
+('Usuario'),
+('Invitado');
+
+-- Insertar usuarios
+INSERT INTO usuarios (rolld, nombreUsuario, clave, nombre, apellido) 
+VALUES
+(
+    (SELECT rolld FROM roles WHERE rol = 'Administrador'),
+    'admin01',
+    'clave_segura_123',
+    'Carlos',
+    'Rodríguez'
+),
+(
+    (SELECT rolld FROM roles WHERE rol = 'Editor'),
+    'editor_ana',
+    'clave_editor',
+    'Ana',
+    'García'
+),
+(
+    (SELECT rolld FROM roles WHERE rol = 'Usuario'),
+    'usuario_juan',
+    'clave_usuario',
+    'Juan',
+    'Pérez'
+);
+
+-- Insertar publicaciones
+INSERT INTO publications (titulo, description, usuariold)
+VALUES
+(
+    'Mi primera publicación',
+    'Esta es una descripción detallada de mi primera publicación en el blog.',
+    (SELECT usuariold FROM usuarios WHERE nombreUsuario = 'editor_ana')
+),
+(
+    'Tutorial de SQL',
+    'Aprende SQL desde cero con este tutorial completo.',
+    (SELECT usuariold FROM usuarios WHERE nombreUsuario = 'admin01')
+);
+
+-- Insertar comentarios
+INSERT INTO comentarios (publicacionld, comentario, usuariold)
+VALUES
+(
+    (SELECT publicacionld FROM publications WHERE titulo = 'Mi primera publicación'),
+    '¡Excelente publicación! Muy informativa.',
+    (SELECT usuariold FROM usuarios WHERE nombreUsuario = 'usuario_juan')
+),
+(
+    (SELECT publicacionld FROM publications WHERE titulo = 'Tutorial de SQL'),
+    'Justo lo que necesitaba para empezar, gracias.',
+    (SELECT usuariold FROM usuarios WHERE nombreUsuario = 'editor_ana')
+);
+
+-- Insertar calificaciones
+INSERT INTO calificaciones (publicacionld, usuariold, calificacion)
+VALUES
+(
+    (SELECT publicacionld FROM publications WHERE titulo = 'Mi primera publicación'),
+    (SELECT usuariold FROM usuarios WHERE nombreUsuario = 'usuario_juan'),
+    5
+),
+(
+    (SELECT publicacionld FROM publications WHERE titulo = 'Tutorial de SQL'),
+    (SELECT usuariold FROM usuarios WHERE nombreUsuario = 'editor_ana'),
+    4
+);
